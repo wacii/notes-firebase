@@ -1,0 +1,34 @@
+{
+  "name": "notes",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --require test/setup.js --compilers js:babel-register",
+    "dev-server": "./node_modules/.bin/webpack-dev-server --history-api-fallback",
+    "build": "./node_modules/.bin/webpack"
+  },
+  "author": "wacii",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^3.6.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-router": "^4.0.0-alpha.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "chai": "^3.5.0",
+    "enzyme": "^2.6.0",
+    "jsdom": "^9.8.3",
+    "mocha": "^3.1.2",
+    "react-addons-test-utils": "^15.3.2",
+    "sinon": "^1.17.6",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
