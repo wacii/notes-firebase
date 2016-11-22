@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Match, Miss, Redirect } from 'react-router';
-import { Login, Signup} from './auth';
+import { Logout, Login, Signup} from './auth';
 import { onAuthStateChanged } from './api'
 import Main from './main';
 import NotesList from './notes-list';
@@ -18,6 +18,8 @@ export default class App extends React.Component {
     );
   }
 
+  // FIXME: having Miss outside of SyncFirebase is necessary...
+  //  but ruins the pattern, should be made into an HOC around Main/NotesList
   render() {
     const {loggedOn} = this.state;
 
@@ -26,6 +28,7 @@ export default class App extends React.Component {
         <div>
           {loggedOn ? (
             <div>
+              <Logout />
               <SyncFirebase>
                 <Match exactly pattern='/' component={Main} />
                 <Match pattern='/notes' component={NotesList} />

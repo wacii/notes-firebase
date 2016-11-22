@@ -1,5 +1,5 @@
 import React from 'react';
-import { login, signup } from './api';
+import { logout, login, signup } from './api';
 
 // TODO: calculate validity once, in the model layer, or something
 
@@ -167,5 +167,22 @@ export class Signup extends React.Component {
         </form>
       </div>
     );
+  }
+}
+
+export class Logout extends React.Component {
+  state = { loading: false, error: null }
+
+  render() {
+    return (
+      <button onClick={event => {
+        this.setState({ loading: true, error: null });
+        logout().catch(error =>
+          this.setState({ loading: false, error: error.message})
+        );
+      }}>
+        Logout
+      </button>
+    )
   }
 }

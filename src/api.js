@@ -61,6 +61,7 @@ function syncNotes() {
       notes = [];
       promise = Promise.reject('Not Authorized');
       ref = null;
+      return;
     }
 
     ref = firebase.database().ref(`notes/${user.uid}`);
@@ -94,6 +95,10 @@ function syncNotes() {
   });
 }
 // end notes stuff
+
+export function logout() {
+  return firebase.auth().signOut();
+}
 
 export function login(email, password) {
   return firebase.auth().signInWithEmailAndPassword(email, password);
