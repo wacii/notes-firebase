@@ -24,8 +24,6 @@ export default class App extends React.Component {
     );
   }
 
-  // FIXME: having Miss outside of SyncFirebase is necessary...
-  //  but ruins the pattern, should be made into an HOC around Main/NotesList
   render() {
     const {loggedOn} = this.state;
 
@@ -35,17 +33,13 @@ export default class App extends React.Component {
           {loggedOn && <Logout />}
           <Match exactly pattern='/' render={() =>
             loggedOn ? (
-              <SyncFirebase>
-                <Main />
-              </SyncFirebase>
+              <SyncFirebase component={Main} />
             ) : (
               <Redirect to='/login' />
             )} />
           <Match pattern='/notes' render={() =>
             loggedOn ? (
-              <SyncFirebase>
-                <NotesList />
-              </SyncFirebase>
+              <SyncFirebase component={NotesList} />
             ) : (
               <Redirect to="/login" />
             )} />
