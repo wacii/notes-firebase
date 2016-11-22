@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { logout, login, signup } from './api';
 
 // TODO: calculate validity once, in the model layer, or something
@@ -116,6 +117,7 @@ export class Login extends React.Component {
             <p className="error">Email password combination not found</p>}
           <input type="submit" disabled={loading || !this.isValid(this.state)} />
         </form>
+        <Link to="/signup">Register</Link>
       </div>
     );
   }
@@ -150,21 +152,23 @@ export class Signup extends React.Component {
 
     return (
       <div>
-        <form onSubmit={event => submit(event)}>
-        <EmailField
-          value={email}
-          update={email => this.setState({ email })} />
-        <PasswordField
-          value={password}
-          update={password => this.setState({ password })} />
-        <PasswordConfirmationField
-          value={password}
-          update={passwordConfirmation =>
-            this.setState({ passwordConfirmation })} />
-        {error &&
-          <p className="error">{error}</p>}
-        <input type="submit" disabled={loading || !this.isValid(this.state)} />
+        <form onSubmit={event => this.submit(event)}>
+          <EmailField
+            value={email}
+            update={email => this.setState({ email })} />
+          <PasswordField
+            value={password}
+            update={password => this.setState({ password })} />
+          <PasswordConfirmationField
+            value={password}
+            update={passwordConfirmation =>
+              this.setState({ passwordConfirmation })} />
+          {error &&
+            <p className="error">{error}</p>}
+          <input type="submit"
+            disabled={loading || !this.isValid(this.state)} />
         </form>
+        <Link to="/login">Login</Link>
       </div>
     );
   }
