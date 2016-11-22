@@ -2,31 +2,8 @@ import React from 'react';
 import { BrowserRouter, Match, Miss, Redirect } from 'react-router';
 import { Login, Signup} from './auth';
 import { onAuthStateChanged } from './api'
-const Main = () => (<p>Main</p>);
-
-function MatchUnlessLoggedOn({ component: Component, loggedOn, ...rest }) {
-  return (
-    <Match {...rest} render={props => (
-      loggedOn ? (
-        <Redirect to='/main' />
-      ) : (
-        <Component />
-      )
-    )} />
-  );
-}
-
-function MatchIfLoggedOn({ component: Component, loggedOn, ...rest }) {
-  return (
-    <Match {...rest} render={props => (
-      loggedOn ? (
-        <Component />
-      ) : (
-        <Redirect to='/login' />
-      )
-    )} />
-  )
-}
+import Main from './main';
+import SyncFirebase from './sync-firebase';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -46,19 +23,18 @@ export default class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
-        <MatchUnlessLoggedOn
-          pattern='/login'
-          component={Login}
-          loggedOn={loggedOn} />
-        <MatchUnlessLoggedOn
-          pattern='/signup'
-          component={Signup}
-          loggedOn={loggedOn} />
-        <MatchIfLoggedOn
-          pattern='/main'
-          component={Main}
-          loggedOn={loggedOn} />
-        <Miss render={() => (<p>Not Found!</p>)} />
+          {loggedOn ? (
+            <SyncFirebase>
+              <Match pattern='/' component={Main} />
+              <Miss render={() => <Redirect to='/' />} />
+            </SyncFirebase>
+          ) : (
+            <div>
+              <Match pattern='/login' component={Login} />
+              <Match pattern='/signup' component={Signup} />
+              <Miss render={() => <Redirect to='/login' />} />
+            </div>
+          )}
         </div>
       </BrowserRouter>
     );
