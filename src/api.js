@@ -33,8 +33,14 @@ export function notesStable() {
   return promise || Promise.reject(new Error('Not Authorized'));
 }
 
-export function allNotes() {
-  return notes;
+let fetchCallbacks = [];
+export function onNotes(callback) {
+  fetchCallbacks.push(callback);
+  callback(notes);
+}
+
+export function offNotes(callback) {
+  fetchCallbacks.splice(fetchCallbacks.indexOf(callback), 1);
 }
 
 export function nextNote() {
@@ -81,18 +87,19 @@ function syncNotes() {
     ref.on('child_added', snapshot => {
       notes = notes.concat([snapshot.val()])
       itemAdded = true;
+      fetchCallbacks.forEach(cb => cb(notes));
     });
     ref.on('child_changed', snapshot => {
       const changedNote = snapshot.val();
       notes = notes.map(note =>
         note.key === changedNote.key ? changedNote : note
       );
-      callback(notes);
+      fetchCallbacks.forEach(cb => cb(notes));
     });
     ref.on('child_removed', snapshot => {
       const removedNote = snapshot.val();
       notes = notes.filter(note => note.key !== removedNote.key);
-      callback(notes);
+      fetchCallbacks.forEach(cb => cb(notes));
     });
   });
 }

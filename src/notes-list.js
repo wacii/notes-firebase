@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 import LostDataBanner from './lost-data-banner';
-import { allNotes } from './api';
+import { onNotes, offNotes, deleteNote } from './api';
 
 function NoteItem({note, remove}) {
   return (
     <li>
       <span>{note.text}</span>
-      <button onClick={() => remove(note.id)}>X</button>
+      <button onClick={() => remove(note.key)}>X</button>
     </li>
   );
 }
@@ -20,8 +20,8 @@ class NotesList extends React.Component {
     this.closeAlert = this.closeAlert.bind(this);
   }
 
-  remove(id) {
-    this.props.remove(id)
+  remove(key) {
+    deleteNote(key)
       .catch(_error => this.setState({ error: true }));
   }
 
@@ -49,10 +49,15 @@ export default class NotesListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { notes: [] };
+    this.updateNotes = notes => this.setState({ notes })
   }
 
   componentDidMount() {
-    this.setState({ notes: allNotes() });
+    onNotes(this.updateNotes);
+  }
+
+  componentWillUnmount() {
+    offNotes(this.updateNotes);
   }
 
   render() {
