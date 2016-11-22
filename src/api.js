@@ -27,7 +27,7 @@ export function init() {
 
 // begin notes stuff
 let notes = [];
-let promise = Promise.reject(new Error('Not Authorized'));
+let promise = null;
 
 export function notesStable() {
   return promise;
@@ -59,7 +59,7 @@ function syncNotes() {
         ref.off('child_removed');
       }
       notes = [];
-      promise = Promise.reject('Not Authorized');
+      promise = Promise.reject(new Error('Not Authorized'));
       ref = null;
       return;
     }
@@ -67,18 +67,20 @@ function syncNotes() {
     ref = firebase.database().ref(`notes/${user.uid}`);
     notes = [];
 
+    // data considered stable if no item added for 50ms
     const WAIT_FOR_STABLE_DATA = 50;
-    let stableAfter = Date.now() + WAIT_FOR_STABLE_DATA;
+    let itemAdded = false;
     promise = new Promise(resolve => {
-      ref.on('child_added', snapshot => {
-        notes = notes.concat([snapshot.val()])
-        // OPTIMIZE: you could avoid this date by caching stable state
-        const now = Date.now();
-        if (stableAfter < now)
-          resolve(notes);
-        else
-          stableAfter = now + WAIT_FOR_STABLE_DATA;
-      });
+      const intervalId = window.setInterval(() => {
+        if (itemAdded)
+          return itemAdded = false;
+        resolve(notes);
+        window.clearInterval(intervalId);
+      }, WAIT_FOR_STABLE_DATA);
+    });
+    ref.on('child_added', snapshot => {
+      notes = notes.concat([snapshot.val()])
+      itemAdded = true;
     });
     ref.on('child_changed', snapshot => {
       const changedNote = snapshot.val();
