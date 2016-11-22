@@ -6,6 +6,12 @@ import Main from './main';
 import NotesList from './notes-list';
 import SyncFirebase from './sync-firebase';
 
+function NotFound() {
+  return (
+    <p>404: Not Found</p>
+  );
+}
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -26,22 +32,36 @@ export default class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          {loggedOn ? (
-            <div>
-              <Logout />
+          {loggedOn && <Logout />}
+          <Match exactly pattern='/' render={() =>
+            loggedOn ? (
               <SyncFirebase>
-                <Match exactly pattern='/' component={Main} />
-                <Match pattern='/notes' component={NotesList} />
+                <Main />
               </SyncFirebase>
-              <Miss render={() => <Redirect to='/' />} />
-            </div>
-          ) : (
-            <div>
-              <Match pattern='/login' component={Login} />
-              <Match pattern='/signup' component={Signup} />
-              <Miss render={() => <Redirect to='/login' />} />
-            </div>
-          )}
+            ) : (
+              <Redirect to='/login' />
+            )} />
+          <Match pattern='/notes' render={() =>
+            loggedOn ? (
+              <SyncFirebase>
+                <NotesList />
+              </SyncFirebase>
+            ) : (
+              <Redirect to="/login" />
+            )} />
+          <Match pattern='/login' render={() =>
+            loggedOn ? (
+              <Redirect to='/' />
+            ) : (
+              <Login />
+            )} />
+          <Match pattern='/signup' render={() =>
+            loggedOn ? (
+              <Redirect to='/' />
+            ) : (
+              <Signup />
+            )} />
+          <Miss component={NotFound} />
         </div>
       </BrowserRouter>
     );
