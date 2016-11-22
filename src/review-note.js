@@ -40,7 +40,7 @@ function EmptyNote() {
 function ResolveNote({note, keep, remove}) {
   return (
     <div>
-      <p>{note}</p>
+      <p>{note.text}</p>
       <div>
         <button id="keep-note" onClick={keep}>Keep</button>
         <button id="remove-note" onClick={remove}>Remove</button>

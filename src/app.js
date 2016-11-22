@@ -3,6 +3,7 @@ import { BrowserRouter, Match, Miss, Redirect } from 'react-router';
 import { Login, Signup} from './auth';
 import { onAuthStateChanged } from './api'
 import Main from './main';
+import NotesList from './notes-list';
 import SyncFirebase from './sync-firebase';
 
 export default class App extends React.Component {
@@ -24,10 +25,13 @@ export default class App extends React.Component {
       <BrowserRouter>
         <div>
           {loggedOn ? (
-            <SyncFirebase>
-              <Match pattern='/' component={Main} />
+            <div>
+              <SyncFirebase>
+                <Match exactly pattern='/' component={Main} />
+                <Match pattern='/notes' component={NotesList} />
+              </SyncFirebase>
               <Miss render={() => <Redirect to='/' />} />
-            </SyncFirebase>
+            </div>
           ) : (
             <div>
               <Match pattern='/login' component={Login} />

@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router';
 import LostDataBanner from './lost-data-banner';
+import { allNotes } from './api';
 
 function NoteItem({note, remove}) {
   return (
@@ -10,7 +12,7 @@ function NoteItem({note, remove}) {
   );
 }
 
-export default class NotesList extends React.Component {
+class NotesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { error: false };
@@ -29,7 +31,7 @@ export default class NotesList extends React.Component {
 
   render() {
     const noteItems = this.props.notes.map(note =>
-      <NoteItem key={note.id} note={note} remove={this.remove} />
+      <NoteItem key={note.key} note={note} remove={this.remove} />
     );
 
     return (
@@ -37,7 +39,23 @@ export default class NotesList extends React.Component {
         {this.state.error &&
           <LostDataBanner close={this.closeAlert} />}
         <ul>{noteItems}</ul>
+        <Link to="/">Back</Link>
       </div>
     );
+  }
+}
+
+export default class NotesListContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { notes: [] };
+  }
+
+  componentDidMount() {
+    this.setState({ notes: allNotes() });
+  }
+
+  render() {
+    return <NotesList notes={this.state.notes} />
   }
 }
