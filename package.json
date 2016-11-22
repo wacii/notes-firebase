@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --require test/setup.js --compilers js:babel-register",
     "dev-server": "./node_modules/.bin/webpack-dev-server --history-api-fallback",
-    "build": "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack",
+    "deploy": "npm run build && firebase deploy"
   },
   "author": "wacii",
   "license": "ISC",

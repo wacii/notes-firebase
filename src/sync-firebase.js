@@ -15,7 +15,7 @@ export default class SyncFirebase extends React.Component {
 
   render() {
     if (this.state.synced)
-      return <div>{this.props.children}</div>;
+      return <this.props.component />
 
     return <p>Syncing...</p>;
   }
