@@ -30,7 +30,7 @@ let notes = [];
 let promise = null;
 
 export function notesStable() {
-  return promise;
+  return promise || Promise.reject(new Error('Not Authorized'));
 }
 
 export function allNotes() {
@@ -59,7 +59,7 @@ function syncNotes() {
         ref.off('child_removed');
       }
       notes = [];
-      promise = Promise.reject(new Error('Not Authorized'));
+      promise = null;
       ref = null;
       return;
     }
