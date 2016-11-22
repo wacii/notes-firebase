@@ -107,7 +107,9 @@ export function login(email, password) {
 }
 
 export function signup(email, password) {
-  return firebase.auth().createUserWithEmailAndPassword(email, password);
+  return firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(addTips)
+    .catch(error => console.error(error.message));
 }
 
 export function onAuthStateChanged(callback) {
@@ -142,12 +144,14 @@ export function deleteNote(key) {
   return ref.child(key).remove();
 }
 
-export function addTips(user = { uid }) {
+function addTips(user) {
+  let uid = user.uid;
   const ref = firebase.database().ref(`notes/${uid}`);
   tips.forEach(tip => {
     const item = ref.push();
     item.set(Object.assign({}, tip, { key: item.key }));
   });
+  return user;
 }
 
 function dateFromNow(interval) {
