@@ -160,7 +160,8 @@ export class Signup extends React.Component {
             value={password}
             update={password => this.setState({ password })} />
           <PasswordConfirmationField
-            value={password}
+            password={password}
+            value={passwordConfirmation}
             update={passwordConfirmation =>
               this.setState({ passwordConfirmation })} />
           {error &&
