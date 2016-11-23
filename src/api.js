@@ -73,8 +73,8 @@ function syncNotes() {
     ref = firebase.database().ref(`notes/${user.uid}`);
     notes = [];
 
-    // data considered stable if no item added for 500ms
-    const WAIT_FOR_STABLE_DATA = 500;
+    // data considered stable if no item added for 1 second...
+    const WAIT_FOR_STABLE_DATA = 1000;
     let itemAdded = false;
     promise = new Promise(resolve => {
       const intervalId = window.setInterval(() => {

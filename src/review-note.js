@@ -99,14 +99,14 @@ export default class ReviewNote extends React.Component {
 
   keep() {
     this.setState({ state: KEEPING });
-    this.props.keepNote()
+    this.props.keepNote(this.state.note)
       .catch(_error => this.setState({ error: true }));
     this.nextNote();
   }
 
   remove() {
     this.setState({ state: REMOVING });
-    this.props.removeNote()
+    this.props.removeNote(this.state.note)
       .catch(_error => this.setState({ error: true }));
     this.nextNote();
   }
