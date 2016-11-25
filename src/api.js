@@ -93,6 +93,8 @@ export function onAuthStateChanged(callback) {
 }
 
 export function createNote(text) {
+  const interval = ONE_DAY;
+
   const { uid } = firebase.auth().currentUser;
   const ref = firebase.database().ref(`notes/${uid}`).push();
 
