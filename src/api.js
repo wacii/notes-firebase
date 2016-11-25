@@ -11,7 +11,6 @@ export function init() {
     databaseURL: 'https://notes-8b5c2.firebaseio.com',
     storageBucket: '',
   });
-  syncNotes();
   return new Promise((resolve, reject) => {
     const unsubscribe = firebase.auth().onAuthStateChanged(
       user => {
@@ -26,82 +25,52 @@ export function init() {
 }
 
 // begin notes stuff
-let notes = [];
-let promise = null;
+export function liveNotes(callback) {
+  let notes = [];
+  const uid = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref(`notes/${uid}`);
 
-export function notesStable() {
-  return promise || Promise.reject(new Error('Not Authorized'));
-}
+  ref.on('child_added', (snapshot) => {
+    notes = notes.concat([snapshot.val()]);
+    callback(notes);
+  })
 
-let fetchCallbacks = [];
-export function onNotes(callback) {
-  fetchCallbacks.push(callback);
-  callback(notes);
-}
+  ref.on('child_changed', (snapshot) => {
+    const value = snapshot.val();
+    notes = notes.map(note => (note.key === value.key ? value : note));
+    callback(notes);
+  });
 
-export function offNotes(callback) {
-  fetchCallbacks.splice(fetchCallbacks.indexOf(callback), 1);
+  ref.on('child_removed', (snapshot) => {
+    const {key: removedKey} = snapshot.val();
+    notes = notes.filter(note => note.key !== removedKey);
+    callback(notes);
+  });
+
+  return () => {
+    ref.off('child_added');
+    ref.off('child_changed');
+    ref.off('child_removed');
+  }
 }
 
 export function nextNote() {
-  const now = (new Date).getTime();
-  const dueNotes = notes.filter(note => note.reviewAfter < now);
-  const note = (dueNotes.length === 0 ? null : dueNotes.reduce(min));
+  const uid = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref(`notes/${uid}`);
+  return new Promise(resolve => {
+    ref.once('value', snapshot => {
+      const notes = Object.values(snapshot.val());
+      const now = (new Date).getTime();
+      const dueNotes = notes.filter(note => note.reviewAfter < now);
+      const note = (dueNotes.length === 0 ? null : dueNotes.reduce(min));
 
-  return note;
+      resolve(note);
+    });
+  })
 }
 
 function min(candidate, note) {
   return (note.reviewAfter < candidate.reviewAfter ? note : candidate);
-}
-
-let ref
-function syncNotes() {
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      if (ref) {
-        ref.off('child_added');
-        ref.off('child_changed');
-        ref.off('child_removed');
-      }
-      notes = [];
-      promise = null;
-      ref = null;
-      return;
-    }
-
-    ref = firebase.database().ref(`notes/${user.uid}`);
-    notes = [];
-
-    // data considered stable if no item added for 1 second...
-    const WAIT_FOR_STABLE_DATA = 1000;
-    let itemAdded = false;
-    promise = new Promise(resolve => {
-      const intervalId = window.setInterval(() => {
-        if (itemAdded)
-          return itemAdded = false;
-        resolve(notes);
-        window.clearInterval(intervalId);
-      }, WAIT_FOR_STABLE_DATA);
-    });
-    ref.on('child_added', snapshot => {
-      notes = notes.concat([snapshot.val()])
-      itemAdded = true;
-      fetchCallbacks.forEach(cb => cb(notes));
-    });
-    ref.on('child_changed', snapshot => {
-      const changedNote = snapshot.val();
-      notes = notes.map(note =>
-        note.key === changedNote.key ? changedNote : note
-      );
-      fetchCallbacks.forEach(cb => cb(notes));
-    });
-    ref.on('child_removed', snapshot => {
-      const removedNote = snapshot.val();
-      notes = notes.filter(note => note.key !== removedNote.key);
-      fetchCallbacks.forEach(cb => cb(notes));
-    });
-  });
 }
 // end notes stuff
 

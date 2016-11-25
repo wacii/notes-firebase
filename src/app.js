@@ -4,7 +4,6 @@ import { Logout, Login, Signup} from './auth';
 import { onAuthStateChanged } from './api'
 import Main from './main';
 import NotesList from './notes-list';
-import SyncFirebase from './sync-firebase';
 
 function NotFound() {
   return (
@@ -33,13 +32,13 @@ export default class App extends React.Component {
           {loggedOn && <Logout />}
           <Match exactly pattern='/' render={() =>
             loggedOn ? (
-              <SyncFirebase component={Main} />
+              <Main />
             ) : (
               <Redirect to='/login' />
             )} />
           <Match pattern='/notes' render={() =>
             loggedOn ? (
-              <SyncFirebase component={NotesList} />
+              <NotesList />
             ) : (
               <Redirect to="/login" />
             )} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import LostDataBanner from './lost-data-banner';
-import { onNotes, offNotes, deleteNote } from './api';
+import { liveNotes, deleteNote } from './api';
 
 function NoteItem({note, remove}) {
   return (
@@ -53,11 +53,11 @@ export default class NotesListContainer extends React.Component {
   }
 
   componentDidMount() {
-    onNotes(this.updateNotes);
+    this.unsubscribe = liveNotes(this.updateNotes);
   }
 
   componentWillUnmount() {
-    offNotes(this.updateNotes);
+    this.unsubscribe();
   }
 
   render() {

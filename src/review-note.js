@@ -1,17 +1,25 @@
 import React from 'react';
 import LostDataBanner from './lost-data-banner';
 
+const LOADING = 'loading';
 const ENTERING = 'entering';
 const SHOWING = 'showing';
 const REMOVING = 'removing';
 const KEEPING = 'keeping';
 
 const stateToComponent = {
+  [LOADING]: LoadingNote,
   [ENTERING]: EnteringNote,
   [SHOWING]: ShowingNote,
   [REMOVING]: RemovingNote,
   [KEEPING]: KeepingNote,
 };
+
+function LoadingNote() {
+  return (
+    <p>Loading...</p>
+  );
+}
 
 function EnteringNote({note}) {
   return (
@@ -79,7 +87,7 @@ export default class ReviewNote extends React.Component {
 
     this.state = {
       note: '',
-      state: SHOWING,
+      state: LOADING,
       error: false,
     };
 
@@ -94,7 +102,8 @@ export default class ReviewNote extends React.Component {
   }
 
   nextNote() {
-    this.setState({ note: this.props.nextNote(), state: SHOWING });
+    this.props.nextNote()
+      .then(note => this.setState({ note, state: SHOWING }));
   }
 
   keep() {
