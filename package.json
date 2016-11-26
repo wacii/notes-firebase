@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --require test/setup.js --compilers js:babel-register",
-    "dev-server": "./node_modules/.bin/webpack-dev-server --history-api-fallback",
+    "dev-server": "./node_modules/.bin/webpack-dev-server --history-api-fallback --content-base public/",
     "build": "./node_modules/.bin/webpack",
     "deploy": "npm run build && firebase deploy"
   },
@@ -29,6 +29,7 @@
     "mocha": "^3.1.2",
     "react-addons-test-utils": "^15.3.2",
     "sinon": "^1.17.6",
+    "spectre.css": "^0.1.27",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
   }
