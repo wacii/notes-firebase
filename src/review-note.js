@@ -17,7 +17,7 @@ const stateToComponent = {
 
 function LoadingNote() {
   return (
-    <p>Loading...</p>
+    <div className="loading" />
   );
 }
 
@@ -26,8 +26,8 @@ function EnteringNote({note}) {
     <div>
       <p>{note}</p>
       <div>
-        <button disabled>Keep</button>
-        <button disabled>Remove</button>
+        <button className="btn" disabled>Keep</button>
+        <button className="btn" disabled>Remove</button>
       </div>
     </div>
   )
@@ -41,7 +41,9 @@ function ShowingNote(props) {
 
 function EmptyNote() {
   return (
-    <p>There are no notes left to review.</p>
+    <div className="empty">
+      <p className="empty-title">There are no notes left to review.</p>
+    </div>
   );
 }
 
@@ -50,8 +52,12 @@ function ResolveNote({note, keep, remove}) {
     <div>
       <p>{note.text}</p>
       <div>
-        <button id="keep-note" onClick={keep}>Keep</button>
-        <button id="remove-note" onClick={remove}>Remove</button>
+        <button id="keep-note" className="btn" onClick={keep}>
+          Keep
+        </button>
+        <button id="remove-note" className="btn" onClick={remove}>
+          Remove
+        </button>
       </div>
     </div>
   )
@@ -62,8 +68,8 @@ function KeepingNote({note}) {
     <div>
       <p>{note}</p>
       <div>
-        <button disabled>Keep</button>
-        <button disabled>Remove</button>
+        <button className="btn" disabled>Keep</button>
+        <button className="btn" disabled>Remove</button>
       </div>
     </div>
   )
@@ -74,8 +80,8 @@ function RemovingNote({note}) {
     <div>
       <p>{note}</p>
       <div>
-        <button disabled>Keep</button>
-        <button disabled>Remove</button>
+        <button className="btn" disabled>Keep</button>
+        <button className="btn" disabled>Remove</button>
       </div>
     </div>
   )
@@ -129,11 +135,11 @@ export default class ReviewNote extends React.Component {
     const Note = stateToComponent[state];
 
     return (
-      <div>
+      <div className="card">
         {error &&
           <LostDataBanner close={this.closeAlert}/>}
 
-        <div>
+        <div className="card-body">
           <Note
             note={note}
             keep={this.keep}

@@ -3,12 +3,19 @@ import { Link } from 'react-router';
 import LostDataBanner from './lost-data-banner';
 import { liveNotes, deleteNote } from './api';
 
+// FIXME: remove this and other <br>s in favor of css
 function NoteItem({note, remove}) {
   return (
-    <li>
-      <span>{note.text}</span>
-      <button onClick={() => remove(note.key)}>X</button>
-    </li>
+    <div>
+      <div className="card">
+        <div className="card-header">
+          <button className="btn btn-clear float-right"
+            onClick={() => remove(note.key)} />
+        </div>
+        <p className="card-body">{note.text}</p>
+      </div>
+      <br />
+    </div>
   );
 }
 
@@ -38,7 +45,7 @@ class NotesList extends React.Component {
       <div>
         {this.state.error &&
           <LostDataBanner close={this.closeAlert} />}
-        <ul>{noteItems}</ul>
+        <div>{noteItems}</div>
         <Link to="/">Back</Link>
       </div>
     );

@@ -17,15 +17,16 @@ class EmailField extends React.Component {
     const { value, update } = this.props;
 
     return (
-      <div>
-        <label>
-          <span>Email:</span>
-          <input type="email" name="email"
-            onBlur={() => this.setState({ dirty: true })}
-            onChange={event => update(event.target.value)} />
-          {this.state.dirty && !this.isValid(this.props.value) &&
-            <p className="error">Not a valid email.</p>}
+      <div className="form-group">
+        <label className="form-label" for="email">
+          Email:
         </label>
+        <input type="email" name="email"
+          className="form-input"
+          onBlur={() => this.setState({ dirty: true })}
+          onChange={event => update(event.target.value)} />
+        {this.state.dirty && !this.isValid(this.props.value) &&
+          <p className="form-input-hint">Not a valid email.</p>}
       </div>
     );
   }
@@ -42,15 +43,18 @@ class PasswordField extends React.Component {
     const { value, update } = this.props;
 
     return (
-      <div>
-        <label>
-          <span>Password:</span>
-          <input type="password" name="password"
-            onBlur={() => this.setState({ dirty: true })}
-            onChange={event => update(event.target.value)} />
-          {this.state.dirty && !this.isValid(value) &&
-            <p className="error">Password should be at least six characters</p>}
+      <div className="form-group">
+        <label className="form-label" for="password">
+          Password:
         </label>
+        <input type="password" name="password"
+          className="form-input"
+          onBlur={() => this.setState({ dirty: true })}
+          onChange={event => update(event.target.value)} />
+        {this.state.dirty && !this.isValid(value) &&
+          <p className="form-input-hint">
+            Password should be at least six characters
+          </p>}
       </div>
     );
   }
@@ -67,15 +71,16 @@ class PasswordConfirmationField extends React.Component {
     const { password, value, update } = this.props;
 
     return (
-      <div>
-        <label>
-          <span>Password confirmation:</span>
-          <input type="password" name="password-confirmation"
-            onBlur={() => this.setState({ dirty: true })}
-            onChange={event => update(event.target.value)} />
-          {this.state.dirty && !this.isValid(password, value) &&
-            <p className="error">Password do not match</p>}
+      <div className="form-group">
+        <label className="form-label" for="password-confirmation">
+          Password confirmation:
         </label>
+        <input type="password" name="password-confirmation"
+          className="form-input"
+          onBlur={() => this.setState({ dirty: true })}
+          onChange={event => update(event.target.value)} />
+        {this.state.dirty && !this.isValid(password, value) &&
+          <p className="error">Password do not match</p>}
       </div>
     );
   }
@@ -114,10 +119,16 @@ export class Login extends React.Component {
             value={password}
             update={password => this.setState({ password })} />
           {error &&
-            <p className="error">Email password combination not found</p>}
-          <input type="submit" disabled={loading || !this.isValid(this.state)} />
+            <p className="form-input-hint">Email password combination not found</p>}
+          <div>
+            <button className="btn"
+              disabled={loading || !this.isValid(this.state)}>
+              Login
+            </button>
+          </div>
         </form>
-        <Link to="/signup">Register</Link>
+        <br />
+        <Link to="/signup">Sign up</Link>
       </div>
     );
   }
@@ -165,10 +176,15 @@ export class Signup extends React.Component {
             update={passwordConfirmation =>
               this.setState({ passwordConfirmation })} />
           {error &&
-            <p className="error">{error}</p>}
-          <input type="submit"
-            disabled={loading || !this.isValid(this.state)} />
+            <p className="form-input-hint">{error}</p>}
+          <div>
+            <button className="btn"
+              disabled={loading || !this.isValid(this.state)}>
+              Sign up
+            </button>
+          </div>
         </form>
+        <br />
         <Link to="/login">Login</Link>
       </div>
     );
@@ -180,14 +196,17 @@ export class Logout extends React.Component {
 
   render() {
     return (
-      <button onClick={event => {
-        this.setState({ loading: true, error: null });
-        logout().catch(error =>
-          this.setState({ loading: false, error: error.message})
-        );
-      }}>
-        Logout
-      </button>
+      <div>
+        <button className="btn float-right" onClick={event => {
+          this.setState({ loading: true, error: null });
+          logout().catch(error =>
+            this.setState({ loading: false, error: error.message})
+          );
+        }}>
+          Logout
+        </button>
+        <h1>Notes</h1>
+      </div>
     )
   }
 }

@@ -34,14 +34,22 @@ export default class NewNote extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         {this.state.error &&
           <LostDataBanner close={this.closeAlert} />}
-            
+
         <form onSubmit={this.submit}>
-          <textarea onChange={this.updateText} value={this.state.text} />
+          <div className="form-group">
+            <textarea
+              className="form-input"
+              placeholder="New Note"
+              onChange={this.updateText}
+              value={this.state.text} />
+          </div>
           <div>
-            <input type="submit" disabled={this.state.text === ''} />
+            <button className="btn" disabled={this.state.text === ''}>
+              Submit
+            </button>
           </div>
         </form>
       </div>

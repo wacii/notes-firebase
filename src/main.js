@@ -8,11 +8,15 @@ export default function Main() {
   return (
     <div>
       <NewNote handler={createNote} />
+      <br />
       <ReviewNote
         nextNote={nextNote}
         keepNote={keepNote}
         removeNote={deleteNote} />
-      <Link to="/notes">All notes</Link>
+      <br />
+      <div className="container">
+        <Link to="/notes">All notes</Link>
+      </div>
     </div>
   );
 }
