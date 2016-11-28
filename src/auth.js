@@ -18,10 +18,10 @@ class EmailField extends React.Component {
 
     return (
       <div className="form-group">
-        <label className="form-label" for="email">
+        <label className="form-label" htmlFor="email">
           Email:
         </label>
-        <input type="email" name="email"
+        <input type="email" name="email" id="email"
           className="form-input"
           onBlur={() => this.setState({ dirty: true })}
           onChange={event => update(event.target.value)} />
@@ -44,10 +44,10 @@ class PasswordField extends React.Component {
 
     return (
       <div className="form-group">
-        <label className="form-label" for="password">
+        <label className="form-label" htmlFor="password">
           Password:
         </label>
-        <input type="password" name="password"
+        <input type="password" name="password" id="password"
           className="form-input"
           onBlur={() => this.setState({ dirty: true })}
           onChange={event => update(event.target.value)} />
@@ -72,10 +72,11 @@ class PasswordConfirmationField extends React.Component {
 
     return (
       <div className="form-group">
-        <label className="form-label" for="password-confirmation">
+        <label className="form-label" htmlFor="password-confirmation">
           Password confirmation:
         </label>
         <input type="password" name="password-confirmation"
+          id="password-confirmation"
           className="form-input"
           onBlur={() => this.setState({ dirty: true })}
           onChange={event => update(event.target.value)} />
