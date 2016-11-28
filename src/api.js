@@ -63,7 +63,6 @@ export function nextNote() {
       const now = (new Date).getTime();
       const dueNotes = notes.filter(note => note.reviewAfter < now);
       const note = (dueNotes.length === 0 ? null : dueNotes.reduce(min));
-
       resolve(note);
     });
   })

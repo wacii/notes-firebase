@@ -24,7 +24,7 @@ function LoadingNote() {
 function EnteringNote({note}) {
   return (
     <div>
-      <p>{note}</p>
+      <p>{note.text}</p>
       <div>
         <button className="btn" disabled>Keep</button>
         <button className="btn" disabled>Remove</button>
@@ -66,7 +66,7 @@ function ResolveNote({note, keep, remove}) {
 function KeepingNote({note}) {
   return (
     <div>
-      <p>{note}</p>
+      <p>{note.text}</p>
       <div>
         <button className="btn" disabled>Keep</button>
         <button className="btn" disabled>Remove</button>
@@ -78,7 +78,7 @@ function KeepingNote({note}) {
 function RemovingNote({note}) {
   return (
     <div>
-      <p>{note}</p>
+      <p>{note.text}</p>
       <div>
         <button className="btn" disabled>Keep</button>
         <button className="btn" disabled>Remove</button>
